@@ -11,3 +11,6 @@ __pycache__
 
 # Environment files
 .env
+
+# Watermark keys
+*.key

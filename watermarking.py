@@ -1,12 +1,19 @@
 import argparse
+import os
 
 import silentcipher
 import torch
 import torchaudio
 
-# This watermark key is public, it is not secure.
-# If using CSM 1B in another application, use a new private key and keep it secret.
-CSM_1B_GH_WATERMARK = [212, 211, 146, 56, 201]
+def load_watermark_key():
+    """Load watermark key from file specified by WATERMARK_KEY_PATH env var."""
+    key_path = os.getenv('WATERMARK_KEY_PATH')
+    if not key_path:
+        raise ValueError('Watermark key path not configured in WATERMARK_KEY_PATH')
+    
+    with open(key_path, 'r') as f:
+        content = f.read().strip()
+    return [int(x) for x in content.split(',')]
 
 
 def cli_check_audio() -> None:
@@ -61,9 +68,10 @@ def verify(
 
 def check_audio_from_file(audio_path: str) -> None:
     watermarker = load_watermarker(device="cuda")
+    watermark_key = load_watermark_key()
 
     audio_array, sample_rate = load_audio(audio_path)
-    is_watermarked = verify(watermarker, audio_array, sample_rate, CSM_1B_GH_WATERMARK)
+    is_watermarked = verify(watermarker, audio_array, sample_rate, watermark_key)
 
     outcome = "Watermarked" if is_watermarked else "Not watermarked"
     print(f"{outcome}: {audio_path}")
