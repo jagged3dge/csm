@@ -1,0 +1,13 @@
+# Python
+__pycache__
+.eggs
+.venv
+
+# Huggingface
+.huggingface
+
+# JetBrains IDE files
+.idea
+
+# Environment files
+.env
