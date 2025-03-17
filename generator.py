@@ -47,7 +47,10 @@ class Generator:
         self._text_tokenizer = load_llama3_tokenizer()
 
         device = next(model.parameters()).device
-        mimi_weight = hf_hub_download(loaders.DEFAULT_REPO, loaders.MIMI_NAME)
+        # mimi_weight = hf_hub_download(loaders.DEFAULT_REPO, loaders.MIMI_NAME)
+        mimi_weight = hf_hub_download(
+            # 'kyutai/moshika-pytorch-bf16', 'tokenizer-e351c8d8-checkpoint125.safetensors')
+            'DavidBrowne17/Muchi', 'tokenizer-e351c8d8-checkpoint125.safetensors')
         mimi = loaders.get_mimi(mimi_weight, device=device)
         mimi.set_num_codebooks(32)
         self._audio_tokenizer = mimi
